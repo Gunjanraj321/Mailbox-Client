@@ -6,7 +6,7 @@ const MailListComponent = () => {
   const [mails, setMails] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
-
+  console.log(mails);
   // const email = useSelector((state) => state.auth.isEmail);
   const token = useSelector((state) => state.auth.isToken);
 
@@ -28,7 +28,22 @@ const MailListComponent = () => {
     };
 
     fetchMails();
-  }, [token]); // Ensure useEffect is triggered when token changes
+  }, [token]); 
+
+  const handleDeleteMail = async (mailId) => {
+    try {
+      await axios.delete(`http://localhost:3001/mail/${mailId}`, {
+        headers: {
+          Authorization: `${token}`,
+        },
+      });
+      // Filter out the deleted mail from the mails state
+      setMails(mails.filter(mail => mail.id !== mailId));
+    } catch (error) {
+      console.error("Error deleting mail:", error);
+      setError("Failed to delete mail");
+    }
+  };
 
   return (
     <div>
@@ -54,6 +69,7 @@ const MailListComponent = () => {
                 <strong>Received At: </strong>{" "}
                 {new Date(mail.createdAt).toLocaleString()}
               </div>
+              <button onClick={() => handleDeleteMail(mail.id)}>Delete</button>
             </li>
           ))}
         </ul>
