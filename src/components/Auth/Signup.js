@@ -1,9 +1,13 @@
 import React, { useState } from "react";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
-
+import { useDispatch } from "react-redux";
+import { setAuthenticated , setEmail, setToken } from "../Redux/AuthSlice";
 
 const Signup = () => {
+
+  const dispatch = useDispatch();
+  const navigate = useNavigate();
 
   const [formData, setFormData] = useState({
     name: "",
@@ -15,16 +19,23 @@ const Signup = () => {
     setFormData({ ...formData, [event.target.name]: event.target.value });
   };
 
-  const navigate = useNavigate();
+ 
 
   const handleSubmit = async (event) => {
     event.preventDefault();
     try {
       const response = await axios.post(
-        "http://localhost:3000/sign/signup",
+        "http://localhost:3001/sign/signup",
         formData
       );
-      console.log("Response:", response);
+
+      const token = response.data.token;
+      const email = response.data.email;
+      console.log(token , email);
+      dispatch(setAuthenticated(true));
+      dispatch(setToken(token));
+      dispatch(setEmail(email))
+
       alert(response.data.message);
       navigate("/");
   

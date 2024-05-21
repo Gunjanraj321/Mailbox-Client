@@ -1,9 +1,7 @@
-import React from 'react'
+import React from "react";
 
 const Welcome = () => {
-  return (
-    <div>Welcome to MailBox</div>
-  )
-}
+  return <div className="font-bold bg-slate-950">Welcome to MailBox</div>;
+};
 
-export default Welcome
+export default Welcome;

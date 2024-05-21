@@ -1,17 +1,18 @@
 import React, { useState } from "react";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
+import { useDispatch } from "react-redux";
+import { setAuthenticated, setEmail, setToken } from "../Redux/AuthSlice";
 
 const Login = () => {
-
   const [formData, setFormData] = useState({
     email: "",
     password: "",
   });
 
   const navigate = useNavigate();
+  const dispatch = useDispatch();
 
-  // handleChange function for form
   const handleChange = (e) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
   };
@@ -20,15 +21,16 @@ const Login = () => {
     event.preventDefault();
     try {
       const response = await axios.post(
-        "http://localhost:3000/sign/login",
+        "http://localhost:3001/sign/login",
         formData
       );
-      if (response.status === 200) {
-        alert(response.data.message); // Alert success message
-        navigate("/");
-      } else {
-        alert("Login failed. Please try again."); // Alert general failure message
-      }
+      const token = response.data.token;
+      const email = response.data.email;
+      // console.log(token, email);
+      dispatch(setAuthenticated(true));
+      dispatch(setToken(token));
+      dispatch(setEmail(email));
+      navigate("/");
     } catch (error) {
       if (error.response && error.response.status === 401) {
         alert("User not found or Please check your Password."); // Alert specific error message from backend
