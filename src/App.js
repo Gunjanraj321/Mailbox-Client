@@ -3,6 +3,7 @@ import Signup from './components/Auth/Signup';
 import Welcome from './components/Welcome';
 import Home from './components/Home/Home';
 import { Navigate, Route, Routes } from 'react-router-dom';
+import MailListComponent from './components/Inbox/MailListComponent';
 
 function App() {
   return (
@@ -14,6 +15,7 @@ function App() {
           <Route path="/welcome" element={<Welcome />} />
           <Route path="/login" element={<Login />} />
           <Route path='/home' element={<Home />} />
+          <Route path='/inbox' element={<MailListComponent/>} />
         </Routes>
       </main>
     </div>
