@@ -17,7 +17,9 @@ const MailListComponent = () => {
           Authorization: `${token}`,
         },
       });
-      setMails(response.data.mails);
+      const sortedMails = response.data.mails.sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt));
+
+      setMails(sortedMails);
       setLoading(false);
     } catch (error) {
       console.error("Error fetching mails:", error);
@@ -29,7 +31,6 @@ const MailListComponent = () => {
     const interval = setInterval(() => {
       fetchMails();
     }, 2000); 
-
     return () => clearInterval(interval); 
   },[]);
 
@@ -117,28 +118,20 @@ const MailListComponent = () => {
       ) : (
         <ul>
           {mails.map((mail) => (
-            // console.log(mail);
-            <li
-              key={mail.id}
-              className="mb-4 p-4 bg-white rounded shadow cursor-pointer"
-              onClick={() => handleMailClick(mail)}
-            >
+             <li
+             key={mail.id}
+             className={`mb-4 p-4 rounded cursor-pointer ${
+               mail.read
+                 ? "bg-white shadow"
+                 : "bg-blue-200 shadow-lg"
+             }`}
+             onClick={() => handleMailClick(mail)}
+           >
               <div>
                 <strong>From: </strong> {mail.sender}
               </div>
               <div>
                 <strong>Subject: </strong> {mail.subject}
-              </div>
-              <div>
-                <strong>Received At: </strong>{" "}
-                {new Date(mail.createdAt).toLocaleString()}
-              </div>
-              <div
-                className={`text-sm ${
-                  mail.read ? "text-gray-500" : "text-blue-500"
-                }`}
-              >
-                {mail.read ? "Read" : "Unread"}
               </div>
             </li>
           ))}

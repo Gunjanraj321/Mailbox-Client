@@ -26,8 +26,8 @@ const ResetForm = () => {
       return;
     }
     try {
-      const response = await axios.post(
-        "http://localhost:3000/pass/forgotpassword",
+      await axios.post(
+        "http://localhost:3001/pass/forgotpassword",
         formData
       );
       alert("Recovery Mail Sent , PLease check your Mail.")

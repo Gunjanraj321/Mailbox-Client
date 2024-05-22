@@ -30,7 +30,7 @@ const SentMailComponent = () => {
       fetchMails();
     }, 2000);
     return () => clearInterval(interval);
-  }, []);
+  },[]);
 
   const handleMailClick = (mail) => {
     setSelectedMail(mail);

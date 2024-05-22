@@ -1,33 +1,52 @@
-import React from 'react';
-import { Routes, Route, Navigate } from 'react-router-dom';
-import Login from './components/Auth/Login';
-import Signup from './components/Auth/Signup';
-import Welcome from './components/Welcome';
-import ComposeMail from './components/Home/ComposeMail';
-import MailListComponent from './components/Home/MailListComponent';
-import Contact from './components/Contact';
-import About from './components/About';
-import Header from './components/Header';
-import PrivateRoute from './components/Home/PrivateRoute';
-import SentMailComponent from './components/Home/SentMailComponent';
+import React from "react";
+import { Routes, Route } from "react-router-dom";
+import Login from "./components/Auth/Login";
+import Signup from "./components/Auth/Signup";
+import Welcome from "./components/Welcome";
+import ComposeMail from "./components/Home/ComposeMail";
+import MailListComponent from "./components/Home/MailListComponent";
+import Contact from "./components/Contact";
+import About from "./components/About";
+import Header from "./components/Header";
+import PrivateRoute from "./routes/PrivateRoute";
+import PublicRoute from "./routes/PublicRoute"; // Import PublicRoute
+import SentMailComponent from "./components/Home/SentMailComponent";
+import ResetForm from "./components/Auth/ResetForm";
+import ResetPage from "./components/Auth/ResetPage";
+import { useSelector } from "react-redux";
+import Footer from "./components/Footer";
 
 function App() {
   return (
     <div>
+      <Header />
       <main>
-        <Header />
         <Routes>
-          <Route path="/" element={<Navigate to="/welcome" />} />
-          <Route path="/signup" element={<Signup />} />
-          <Route path="/welcome" element={<Welcome />} />
-          <Route path="/login" element={<Login />} />
-          <Route path="/compose" element={<PrivateRoute element={ComposeMail} />} />
-          <Route path="/inbox" element={<PrivateRoute element={MailListComponent} />} />
-          <Route path="/sent" element={<PrivateRoute element={SentMailComponent} />} /> {/* Add the new route */}
+          <Route path="/" element={<Welcome />} />
+          <Route path="/signup" element={<PublicRoute element={Signup} />} />
+          <Route path="/login" element={<PublicRoute element={Login} />} />
+          <Route path="/reset" element={<PublicRoute element={ResetForm} />} />
+          <Route
+            path="/resetForm/:uuid"
+            element={<PublicRoute element={ResetPage} />}
+          />
+          <Route
+            path="/compose"
+            element={<PrivateRoute element={ComposeMail} />}
+          />
+          <Route
+            path="/inbox"
+            element={<PrivateRoute element={MailListComponent} />}
+          />
+          <Route
+            path="/sent"
+            element={<PrivateRoute element={SentMailComponent} />}
+          />
           <Route path="/contact" element={<Contact />} />
           <Route path="/about" element={<About />} />
         </Routes>
       </main>
+      <Footer />
     </div>
   );
 }

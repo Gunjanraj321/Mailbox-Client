@@ -4,8 +4,8 @@ const AuthSlice = createSlice({
   name: "auth",
   initialState: {
     isAuth: localStorage.getItem("token") ? true : false,
-    isToken: localStorage.getItem("token") || null,
-    isEmail: localStorage.getItem("email") || null,
+    isToken: localStorage.getItem("token") || null ,
+    isEmail: localStorage.getItem("email") || null ,
   },
   reducers: {
     setAuthenticated: (state, action) => {
@@ -22,6 +22,8 @@ const AuthSlice = createSlice({
     ,
     clearAuthState: (state) => {
       state.isAuth = false;
+      state.isToken = null; 
+      state.isEmail = null;
       localStorage.removeItem("token");
       localStorage.removeItem("email");
     },

@@ -16,7 +16,7 @@ const Header = () => {
   return (
     <header className="bg-blue-600 p-4 flex items-center justify-between shadow-md">
       <div className="flex items-center">
-        <Link to="/welcome">
+        <Link to="/">
           <h1 className="text-white text-2xl font-bold">Mailbox Stream</h1>
         </Link>{" "}
       </div>
@@ -43,12 +43,7 @@ const Header = () => {
             </Link>
           </>
         )}
-        <Link to="/contact" className="text-white hover:text-gray-200">
-          Contact
-        </Link>
-        <Link to="/about" className="text-white hover:text-gray-200">
-          About Us
-        </Link>
+       
         {token ?<button
           onClick={handleLogout}
           className="text-white hover:text-gray-200"

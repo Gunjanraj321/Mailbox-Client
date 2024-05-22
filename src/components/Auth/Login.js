@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import axios from "axios";
-import { useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { useDispatch } from "react-redux";
 import { setAuthenticated, setEmail, setToken } from "../Redux/AuthSlice";
 
@@ -26,50 +26,68 @@ const Login = () => {
       );
       const token = response.data.token;
       const email = response.data.email;
-      // console.log(token, email);
       dispatch(setAuthenticated(true));
       dispatch(setToken(token));
       dispatch(setEmail(email));
       navigate("/");
     } catch (error) {
       if (error.response && error.response.status === 401) {
-        alert("User not found or Please check your Password."); // Alert specific error message from backend
+        alert("User not found or Please check your Password."); 
       } else {
-        alert("An error occurred. Please try again later."); // Alert for other errors
+        alert("An error occurred. Please try again later."); 
       }
       console.error(error);
     }
   };
 
   return (
-    <div className="flex flex-col items-center justify-center px-6 mx-auto ">
-      <h2 className="text-xl font-bold text-gray-900 my-2 px-4 md:text-2xl">
-        Login
-      </h2>
-      <form className="space-y-4 md:space-y-6" onSubmit={handleSubmit}>
-        <input
-          className="bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg block w-full p-2.5"
-          type="email"
-          name="email"
-          placeholder="Email"
-          value={formData.email}
-          onChange={handleChange}
-        />
-        <input
-          className="bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg block w-full p-2.5"
-          type="password"
-          name="password"
-          placeholder="Password"
-          value={formData.password}
-          onChange={handleChange}
-        />
-        <button
-          className="w-full font-bold text-black bg-yellow-100 hover:bg-red-200 focus:ring-4 focus:outline-none focus:ring-primary-300 rounded-lg text-sm px-5 py-2.5 text-center"
-          type="submit"
-        >
-          Login
-        </button>
-      </form>
+    <div className="flex h-screen">
+      <div className="m-auto">
+        <div className="p-8 shadow-lg rounded-xl text-center bg-white">
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            class="inline text-cyan-600 h-6 w-6"
+            fill="none"
+            viewBox="0 0 24 24"
+            stroke="currentColor"
+          >
+            <path
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              stroke-width="2"
+              d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"
+            />
+          </svg>
+          <h1 class="text-3xl py-3 font-bold text-cyan-500">Log In</h1>
+          <form className="text-left pt-3 " onSubmit={handleSubmit}>
+            <input
+              className="p-1 rounded-lg bg-gray-100 shadow-md focus:outline-none focus:border-2 border-cyan-500"
+              type="email"
+              name="email"
+              placeholder="Email"
+              value={formData.email}
+              onChange={handleChange}
+            />
+            <input
+              className="block p-1 mt-3 rounded-lg bg-gray-100 shadow-md focus:outline-none focus:border-2 border-cyan-500"
+              type="password"
+              name="password"
+              placeholder="Password"
+              value={formData.password}
+              onChange={handleChange}
+            />
+            <Link to="/reset" className="text-sm text-cyan-600 underline p-2">
+              Forgot password?
+            </Link>
+            <button
+              className="bg-cyan-200 p-2 pr-5 pl-5 text-gray-800 font-semibold rounded-xl border-cyan-700 focus:ring-2 m-4"
+              type="submit"
+            >
+              Login
+            </button>
+          </form>
+        </div>
+      </div>
     </div>
   );
 };

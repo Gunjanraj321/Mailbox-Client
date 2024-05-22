@@ -1,11 +1,10 @@
 import React, { useState } from "react";
 import axios from "axios";
-import { useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { useDispatch } from "react-redux";
-import { setAuthenticated , setEmail, setToken } from "../Redux/AuthSlice";
+import { setAuthenticated, setEmail, setToken } from "../Redux/AuthSlice";
 
 const Signup = () => {
-
   const dispatch = useDispatch();
   const navigate = useNavigate();
 
@@ -19,8 +18,6 @@ const Signup = () => {
     setFormData({ ...formData, [event.target.name]: event.target.value });
   };
 
- 
-
   const handleSubmit = async (event) => {
     event.preventDefault();
     try {
@@ -31,89 +28,87 @@ const Signup = () => {
 
       const token = response.data.token;
       const email = response.data.email;
-      console.log(token , email);
+
       dispatch(setAuthenticated(true));
       dispatch(setToken(token));
-      dispatch(setEmail(email))
+      dispatch(setEmail(email));
 
       alert(response.data.message);
       navigate("/");
-  
     } catch (error) {
       alert("An error occurred. Please try again later.");
 
-      console.error('Error occurred during signup:', typeof error === 'function' ? error.toString() : error);
+      console.error(
+        "Error occurred during signup:",
+        typeof error === "function" ? error.toString() : error
+      );
     }
   };
 
   return (
-    <div className="w-full bg-white rounded-lg shadow dark:border md:mt-0 sm:max-w-md xl:p-0 dark:bg-gray-800 dark:border-gray-700">
-      <div className="p-6 space-y-4 md:space-y-6 sm:p-8">
-        <h1 className="text-xl font-bold leading-tight tracking-tight text-gray-900 md:text-2xl dark:text-white">
-          Create an account
-        </h1>
-        <form className="space-y-4 md:space-y-6" onSubmit={handleSubmit}>
-          <div>
-            <label
-              htmlFor="name"
-              className="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
-            >
-              Your full name
-            </label>
-            <input
-              type="text"
-              name="name"
-              className="bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-blue-600 focus:border-blue-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
-              placeholder="Emelia Erickson"
-              required
-              value={formData.name}
-              onChange={handleChange}
-            />
-          </div>
-          <div>
-            <label
-              htmlFor="username"
-              className="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
-            >
-              Email
-            </label>
-            <input
-              type="email"
-              name="email"
-              className="bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-blue-600 focus:border-blue-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
-              placeholder="emelia_erickson24@gmail.com"
-              required
-              value={formData.email}
-              onChange={handleChange}
-            />
-          </div>
-          <div>
-            <label
-              htmlFor="password"
-              className="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
-            >
-              Password
-            </label>
-            <input
-              type="password"
-              name="password"
-              placeholder="••••••••"
-              className="bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-blue-600 focus:border-blue-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
-              required
-              value={formData.password}
-              onChange={handleChange}
-            />
-          </div>
-          <button
-            type="submit"
-            className="w-full text-white bg-blue-600 hover:bg-blue-700 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"
+    <div className="flex h-screen">
+      <div className="m-auto">
+        <div className="p-8 shadow-lg rounded-xl text-center bg-white">
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            className="inline text-cyan-600 h-6 w-6"
+            fill="none"
+            viewBox="0 0 24 24"
+            stroke="currentColor"
           >
+            <path
+              strokeLinecap="round"
+              strokeLinejoin="round"
+              strokeWidth="2"
+              d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"
+            />
+          </svg>
+          <h1 className="text-3xl font-bold text-cyan-500 pb-3">
             Create an account
-          </button>
-        </form>
+          </h1>
+          <form className="space-y-4 md:space-y-6" onSubmit={handleSubmit}>
+            <div className="flex flex-col space-y-4">
+              <input
+                type="text"
+                name="name"
+                className="p-2 rounded-lg bg-gray-100 shadow-md focus:outline-none focus:border-2 border-cyan-500"
+                placeholder="Emelia Erickson"
+                required
+                value={formData.name}
+                onChange={handleChange}
+              />
+              <input
+                type="email"
+                name="email"
+                className="p-2 rounded-lg bg-gray-100 shadow-md focus:outline-none focus:border-2 border-cyan-500"
+                placeholder="emelia_erickson24@gmail.com"
+                required
+                value={formData.email}
+                onChange={handleChange}
+              />
+              <input
+                type="password"
+                name="password"
+                placeholder="••••••••"
+                className="p-2 rounded-lg bg-gray-100 shadow-md focus:outline-none focus:border-2 border-cyan-500"
+                required
+                value={formData.password}
+                onChange={handleChange}
+              />
+            </div>
+            <Link to="/Login" className="text-sm text-cyan-600 underline mt-4 block">
+              Already Have Account : Login
+            </Link>
+            <button
+              type="submit"
+              className="bg-cyan-200 p-2 text-gray-800 font-semibold rounded-xl border-cyan-700 focus:ring-2 mt-4"
+            >
+              Create an account
+            </button>
+          </form>
+        </div>
       </div>
     </div>
   );
 };
-
 export default Signup;
