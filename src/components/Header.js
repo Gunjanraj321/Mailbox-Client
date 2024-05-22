@@ -49,12 +49,12 @@ const Header = () => {
         <Link to="/about" className="text-white hover:text-gray-200">
           About Us
         </Link>
-        <button
+        {token ?<button
           onClick={handleLogout}
           className="text-white hover:text-gray-200"
         >
           Logout
-        </button>
+        </button>:null}
       </nav>
     </header>
   );
