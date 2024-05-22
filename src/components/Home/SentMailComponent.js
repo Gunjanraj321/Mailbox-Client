@@ -9,26 +9,28 @@ const SentMailComponent = () => {
   const [selectedMail, setSelectedMail] = useState(null); // State for selected mail
 
   const token = useSelector((state) => state.auth.isToken);
+  const fetchMails = async () => {
+    try {
+      const response = await axios.get(`http://localhost:3001/mail/sent`, {
+        headers: {
+          Authorization: `${token}`,
+        },
+      });
+      setMails(response.data.mails);
+      setLoading(false);
+    } catch (error) {
+      console.error("Error fetching sent mails:", error);
+      setLoading(false);
+      setError("Failed to fetch sent mails");
+    }
+  };
 
   useEffect(() => {
-    const fetchMails = async () => {
-      try {
-        const response = await axios.get(`http://localhost:3001/mail/sent`, {
-          headers: {
-            Authorization: `${token}`,
-          },
-        });
-        setMails(response.data.mails);
-        setLoading(false);
-      } catch (error) {
-        console.error("Error fetching sent mails:", error);
-        setLoading(false);
-        setError("Failed to fetch sent mails");
-      }
-    };
-
-    fetchMails();
-  }, [token]);
+    const interval = setInterval(() => {
+      fetchMails();
+    }, 2000);
+    return () => clearInterval(interval);
+  }, []);
 
   const handleMailClick = (mail) => {
     setSelectedMail(mail);
