@@ -5,7 +5,7 @@ import { useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
 
-const Home = () => {
+const ComposeMail = () => {
   const [editorState, setEditorState] = useState("");
   const [to, setTo] = useState("");
   const [subject, setSubject] = useState("");
@@ -105,4 +105,4 @@ const Home = () => {
   );
 };
 
-export default Home;
+export default ComposeMail;
