@@ -3,7 +3,7 @@ import { Editor } from "react-draft-wysiwyg";
 import "react-draft-wysiwyg/dist/react-draft-wysiwyg.css";
 import { useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
-import axios from "axios";
+import { getSocket } from "../Socket";
 
 const ComposeMail = () => {
   const [editorState, setEditorState] = useState("");
@@ -14,7 +14,6 @@ const ComposeMail = () => {
   const [success, setSuccess] = useState(false);
 
   const email = useSelector((state) => state.auth.isEmail);
-  const token = useSelector((state) => state.auth.isToken);
 
   const navigate = useNavigate();
 
@@ -29,22 +28,33 @@ const ComposeMail = () => {
       subject: subject,
       content: editorState.getCurrentContent().getPlainText(),
     };
+    
     try {
-      await axios.post(
-        "http://localhost:3001/mail/send",
-        details,
-        {
-          headers: {
-            "Content-Type":"application/json",
-            Authorization: token,
-          },
-        }
-      );
+      // const res = await axios.post(
+      //   "http://localhost:3001/mail/send",
+      //   details,
+      //   {
+      //     headers: {
+      //       "Content-Type":"application/json",
+      //       Authorization: token,
+      //     },
+      //   }
+      // );
+
+      const socket = getSocket();
+      socket.emit("send mail",details)
+
+      // alert(res.data);
+
+      setSending(false);
+      console.log(details)
+    
       setSuccess(true);
       setTo("");
       setSubject("");
       setEditorState("");
       navigate('/inbox');
+  
     } catch (error) {
         console.error(error);
       setError(

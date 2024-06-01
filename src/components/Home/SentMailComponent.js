@@ -1,36 +1,17 @@
 import React, { useState, useEffect } from "react";
-import axios from "axios";
 import { useSelector } from "react-redux";
+import useFetchMail from "../hooks/useFetchMail";
 
 const SentMailComponent = () => {
-  const [mails, setMails] = useState([]);
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState(null);
-  const [selectedMail, setSelectedMail] = useState(null); // State for selected mail
+  const { sentMails } = useFetchMail();
+  const [selectedMail, setSelectedMail] = useState(null);
 
-  const token = useSelector((state) => state.auth.isToken);
-  const fetchMails = async () => {
-    try {
-      const response = await axios.get(`http://localhost:3001/mail/sent`, {
-        headers: {
-          Authorization: `${token}`,
-        },
-      });
-      setMails(response.data.mails);
-      setLoading(false);
-    } catch (error) {
-      console.error("Error fetching sent mails:", error);
-      setLoading(false);
-      setError("Failed to fetch sent mails");
-    }
-  };
+  const mails = useSelector((state)=> state.mail.sentMails);
+  
 
   useEffect(() => {
-    const interval = setInterval(() => {
-      fetchMails();
-    }, 2000);
-    return () => clearInterval(interval);
-  },[]);
+    sentMails();
+  });
 
   const handleMailClick = (mail) => {
     setSelectedMail(mail);
@@ -43,11 +24,7 @@ const SentMailComponent = () => {
   return (
     <div className="container mx-auto p-4">
       <h2 className="text-2xl font-bold mb-4">Sent Mails</h2>
-      {loading ? (
-        <p>Loading mails...</p>
-      ) : error ? (
-        <p>{error}</p>
-      ) : selectedMail ? (
+      {selectedMail ? (
         <div>
           <button
             onClick={handleBackToList}

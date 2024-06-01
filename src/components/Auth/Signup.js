@@ -2,7 +2,8 @@ import React, { useState } from "react";
 import axios from "axios";
 import { Link, useNavigate } from "react-router-dom";
 import { useDispatch } from "react-redux";
-import { setAuthenticated, setEmail, setToken } from "../Redux/AuthSlice";
+import { setAuthenticated, setEmail, setToken ,setUserId} from "../Redux/AuthSlice";
+import { connectWebSocket } from "../Socket";
 
 const Signup = () => {
   const dispatch = useDispatch();
@@ -28,12 +29,18 @@ const Signup = () => {
 
       const token = response.data.token;
       const email = response.data.email;
+      const userId = response.data.userId;
 
       dispatch(setAuthenticated(true));
       dispatch(setToken(token));
       dispatch(setEmail(email));
+      dispatch(setUserId(userId));
+
+      const socket = connectWebSocket("http://localhost:3001");
+      socket.emit("register", userId);
 
       alert(response.data.message);
+      
       navigate("/");
     } catch (error) {
       alert("An error occurred. Please try again later.");

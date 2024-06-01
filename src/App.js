@@ -4,17 +4,16 @@ import Login from "./components/Auth/Login";
 import Signup from "./components/Auth/Signup";
 import Welcome from "./components/Welcome";
 import ComposeMail from "./components/Home/ComposeMail";
-import MailListComponent from "./components/Home/MailListComponent";
+import MailListComponent from "./components/Home/Inbox";
 import Contact from "./components/Contact";
 import About from "./components/About";
 import Header from "./components/Header";
 import PrivateRoute from "./routes/PrivateRoute";
-import PublicRoute from "./routes/PublicRoute"; // Import PublicRoute
+import PublicRoute from "./routes/PublicRoute"; 
 import SentMailComponent from "./components/Home/SentMailComponent";
 import ResetForm from "./components/Auth/ResetForm";
 import ResetPage from "./components/Auth/ResetPage";
-import { useSelector } from "react-redux";
-import Footer from "./components/Footer";
+// import Footer from "./components/Footer";
 
 function App() {
   return (
@@ -46,7 +45,7 @@ function App() {
           <Route path="/about" element={<About />} />
         </Routes>
       </main>
-      <Footer />
+      {/* <Footer /> */}
     </div>
   );
 }

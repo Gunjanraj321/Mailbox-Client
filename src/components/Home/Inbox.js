@@ -1,38 +1,25 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
-import { useSelector } from "react-redux";
+import { useSelector, useDispatch } from "react-redux";
+import useFetchMail from "../hooks/useFetchMail";
+import { getSocket } from "../Socket";
+import { setInboxMails } from "../Redux/mailSlice";
 
-const MailListComponent = () => {
-  const [mails, setMails] = useState([]);
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState(null);
+const Inbox = () => {
+  const dispatch = useDispatch();
+  const { inboxMails } = useFetchMail();
   const [selectedMail, setSelectedMail] = useState(null);
 
   const token = useSelector((state) => state.auth.isToken);
+  const mails = useSelector((state) => state.mail.inboxMails);
 
-  const fetchMails = async () => {
-    try {
-      const response = await axios.get(`http://localhost:3001/mail/fetch`, {
-        headers: {
-          Authorization: `${token}`,
-        },
-      });
-      const sortedMails = response.data.mails.sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt));
-
-      setMails(sortedMails);
-      setLoading(false);
-    } catch (error) {
-      console.error("Error fetching mails:", error);
-      setLoading(false);
-      setError("Failed to fetch mails");
-    }
-  };
   useEffect(() => {
-    const interval = setInterval(() => {
-      fetchMails();
-    }, 2000); 
-    return () => clearInterval(interval); 
-  },[]);
+    const socket = getSocket();
+    socket.on("inbox",(newmail)=>{
+      dispatch(setInboxMails([...mails,newmail]))
+    })
+    inboxMails();
+  });
 
   const handleMailClick = async (mail) => {
     setSelectedMail(mail);
@@ -51,9 +38,7 @@ const MailListComponent = () => {
             },
           }
         );
-        setMails((prevMails) =>
-          prevMails.map((m) => (m.id === mail.id ? { ...m, read: true } : m))
-        );
+        await inboxMails();
       } catch (error) {
         console.error("Error marking mail as read:", error);
       }
@@ -66,26 +51,25 @@ const MailListComponent = () => {
 
   const handleDeleteMail = async (mailId) => {
     try {
-      await axios.delete(`http://localhost:3001/mail/${mailId}`, {
+      const res = await axios.delete(`http://localhost:3001/mail/${mailId}`, {
         headers: {
           Authorization: `${token}`,
         },
       });
-      setMails(mails.filter((mail) => mail.id !== mailId));
+      alert(res.data.message);
+      setSelectedMail(null);
+      inboxMails();
+      // setMails(mails.filter((mail) => mail.id !== mailId));
     } catch (error) {
       console.error("Error deleting mail:", error);
-      setError("Failed to delete mail");
+      // setError("Failed to delete mail");
     }
   };
 
   return (
     <div className="container mx-auto p-4">
       <h2 className="text-2xl font-bold mb-4">Mails Received</h2>
-      {loading ? (
-        <p>Loading mails...</p>
-      ) : error ? (
-        <p>{error}</p>
-      ) : selectedMail ? (
+      {selectedMail ? (
         <div>
           <button
             onClick={handleBackToList}
@@ -118,15 +102,13 @@ const MailListComponent = () => {
       ) : (
         <ul>
           {mails.map((mail) => (
-             <li
-             key={mail.id}
-             className={`mb-4 p-4 rounded cursor-pointer ${
-               mail.read
-                 ? "bg-white shadow"
-                 : "bg-blue-200 shadow-lg"
-             }`}
-             onClick={() => handleMailClick(mail)}
-           >
+            <li
+              key={mail.id}
+              className={`mb-4 p-4 rounded cursor-pointer ${
+                mail.read ? "bg-white shadow" : "bg-blue-200 shadow-lg"
+              }`}
+              onClick={() => handleMailClick(mail)}
+            >
               <div>
                 <strong>From: </strong> {mail.sender}
               </div>
@@ -141,4 +123,4 @@ const MailListComponent = () => {
   );
 };
 
-export default MailListComponent;
+export default Inbox;

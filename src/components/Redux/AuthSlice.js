@@ -1,4 +1,5 @@
 import { createSlice } from "@reduxjs/toolkit";
+import { disconnectWebSocket } from "../Socket";
 
 const AuthSlice = createSlice({
   name: "auth",
@@ -6,6 +7,7 @@ const AuthSlice = createSlice({
     isAuth: localStorage.getItem("token") ? true : false,
     isToken: localStorage.getItem("token") || null ,
     isEmail: localStorage.getItem("email") || null ,
+    isUserId: localStorage.getItem("userId") || null,
   },
   reducers: {
     setAuthenticated: (state, action) => {
@@ -18,17 +20,25 @@ const AuthSlice = createSlice({
     setEmail:(state,action)=>{
         state.isEmail=action.payload;
         localStorage.setItem("email",action.payload);
+    },
+    setUserId:(state, action)=>{
+      state.isUserId = action.payload;
+      localStorage.setItem("userId",action.payload);
     }
+
     ,
     clearAuthState: (state) => {
       state.isAuth = false;
       state.isToken = null; 
       state.isEmail = null;
+      state.isUserId = null;
+      disconnectWebSocket();
+      localStorage.removeItem("userId");
       localStorage.removeItem("token");
       localStorage.removeItem("email");
     },
   },
 });
 
-export const { setAuthenticated, setToken, clearAuthState, setEmail } = AuthSlice.actions;
+export const { setAuthenticated, setToken, clearAuthState, setEmail ,setUserId } = AuthSlice.actions;
 export default AuthSlice.reducer;
