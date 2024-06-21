@@ -16,7 +16,6 @@ const verify = async (req, res, next) => {
     req.user = user;
     next();
   } catch (error) {
-    console.error(error);
     return res.status(401).json({ success: false, message: "Token verification failed" });
   }
 };

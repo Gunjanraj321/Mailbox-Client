@@ -2,14 +2,12 @@ const Mail = require("../models/mail");
 const User = require("../models/user");
 
 const sendMail = async (data) => {
-  // console.log(`line 5 controller`,data);
   const { from, to, subject, content } = data;
 
   try {
     const sender = await User.findOne({ where: { email: from } });
     const recipient = await User.findOne({ where: { email: to } });
     if (!sender || !recipient) {
-      console.log('error as sender or receiver mail not found')
       return;
       }
     const newMail = await Mail.create({
@@ -18,12 +16,9 @@ const sendMail = async (data) => {
       subject: subject,
       message: content,
     });
-    // const data = JSON.stringify(newMail)
-    console.log(`from send mail`,newMail.dataValues);
+ 
     return newMail.dataValues;
-    // res.status(201).json({ message: "Mail sent successfully", mail: data });
   } catch (error) {
-    // res.status(500).json({message:"internal server error"});
     console.error('error',error);
   }
 };
@@ -47,10 +42,10 @@ const fetchMailsForUser = async (req, res) => {
         };
       })
     );
-    res.status(200).json({ mails });
+    return res.status(200).json({ mails });
 
   } catch (error) {
-    res.status(500).json({ message: "Failed to fetch mails", error });
+    return res.status(500).json({ message: "Failed to fetch mails", error });
   }
 };
 
@@ -58,9 +53,9 @@ const deleteMailById = async (req, res) => {
   const { mailId } = req.params;
   try {
     await Mail.destroy({ where: { id: mailId } });
-    res.json({ message: "Mail deleted successfully" });
+    return res.json({ message: "Mail deleted successfully" });
   } catch (error) {
-    res.status(500).json({ message: "Failed to delete mail", error });
+    return res.status(500).json({ message: "Failed to delete mail", error });
   }
 };
 
@@ -83,9 +78,9 @@ const fetchSentMailsForUser = async (req, res) => {
       })
     );
 
-    res.status(200).json({ mails });
+    return res.status(200).json({ mails });
   } catch (error) {
-    res.status(500).json({ message: "Failed to fetch sent mails", error });
+    return res.status(500).json({ message: "Failed to fetch sent mails", error });
   }
 };
 
@@ -100,9 +95,9 @@ const mailRead = async (req, res) => {
     }
     mail.read = true;
     await mail.save();
-    res.status(200).json({ message: "Mail marked as read" });
+    return res.status(200).json({ message: "Mail marked as read" });
   } catch (error) {
-    res.status(500).json({ message: "Failed to update mail status", error });
+    return res.status(500).json({ message: "Failed to update mail status", error });
   }
 };
 

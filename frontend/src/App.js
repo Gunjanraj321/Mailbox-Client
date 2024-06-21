@@ -13,7 +13,6 @@ import PublicRoute from "./routes/PublicRoute";
 import SentMailComponent from "./components/Home/SentMailComponent";
 import ResetForm from "./components/Auth/ResetForm";
 import ResetPage from "./components/Auth/ResetPage";
-// import Footer from "./components/Footer";
 
 function App() {
   return (
@@ -45,7 +44,6 @@ function App() {
           <Route path="/about" element={<About />} />
         </Routes>
       </main>
-      {/* <Footer /> */}
     </div>
   );
 }

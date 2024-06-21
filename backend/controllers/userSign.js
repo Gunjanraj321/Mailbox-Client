@@ -65,7 +65,7 @@ const processLogin = async (req, res) => {
 
       const subject = "Login Successful";
       const text = "Thank you for logging in. Your login was successful.";
-      // await sendSuccessEmail(email, subject, text);
+      await sendSuccessEmail(email, subject, text);
       res
         .status(200)
         .json({ message: "login successfully", token: token, email: email ,userId:user.id });

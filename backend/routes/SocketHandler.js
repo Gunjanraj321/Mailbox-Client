@@ -18,7 +18,6 @@ const socketHandler = (io) => {
         socket.on("send mail",(data)=>{
             console.log(`from socket 19 ${data}`);
             const newMail = sendMail(data);
-            // console.log("line21",newMail);
 
             if(newMail){
                 const recipientId = newMail.recipientId;

@@ -16,11 +16,10 @@ const forgotpasswordData = async (req, res, next) => {
       });
       sendMail(email, forpasswordrequest.id)
     } else {
-      res.status(404).json({ message: "User not found" });
+      return res.status(404).json({ message: "User not found" });
     }
   } catch (err) {
-    console.error("Error sending recovery email:", err);
-    res.status(500).json({ message: "Error sending recovery email" });
+    return res.status(500).json({ message: "Error sending recovery email" });
   }
 };
 
@@ -33,10 +32,9 @@ const resetpassword = async (req, res) => {
       return res.status(401).json({ message: "Invalid reset link" });
     }
 
-    res.redirect(`http://localhost:3000/resetForm?uuid=${req.params.uuid}`);
+    return res.redirect(`http://localhost:3000/resetForm?uuid=${req.params.uuid}`);
   } catch (err) {
-    console.error("Error in resetpassword route:", err);
-    res.status(500).json({ message: "Internal server error" });
+    return res.status(500).json({ message: "Internal server error" });
   }
 };
 
@@ -66,13 +64,12 @@ const newpassword = async (req, res, next) => {
     await forpasswordrequest.update({ isactive: false }, { transaction: t });
 
     t.commit();
-    res.status(200).json({ message: "Password updated successfully" });
+    return res.status(200).json({ message: "Password updated successfully" });
   } catch (err) {
     if (t) {
       t.rollback();
     }
-    console.error("Error updating password:", err);
-    res.status(500).json({ message: "Internal server error" });
+    return res.status(500).json({ message: "Internal server error" });
   }
 };
 
@@ -105,11 +102,9 @@ const sendMail = async (email , uuid) => {
 
   transporter.sendMail(mailOptions, (error) => {
     if (error) {
-      console.error("Error sending recovery email:", error);
-      res.status(500).json({ message: "Error sending recovery email" });
+      return res.status(500).json({ message: "Error sending recovery email" });
     } else {
-      console.log("Recovery email sent successfully");
-      res.status(200).json({ message: "Recovery email sent successfully" });
+      return res.status(200).json({ message: "Recovery email sent successfully" });
     }
   });
 };
