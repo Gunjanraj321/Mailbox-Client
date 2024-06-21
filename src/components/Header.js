@@ -2,11 +2,13 @@ import React from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { Link, useNavigate } from "react-router-dom";
 import { clearAuthState } from "./Redux/AuthSlice";
+import useWebSocket from "./hooks/useSocket";
 
 const Header = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const token = useSelector((state) => state.auth.isToken);
+  useWebSocket();
 
   const handleLogout = () => {
     dispatch(clearAuthState());
